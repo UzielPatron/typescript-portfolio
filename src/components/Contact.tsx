@@ -18,6 +18,9 @@ const formInitialDetails: IFormDetails = {
   message: '',
 };
 
+const { VITE_BACKEND_SERVER } = import.meta.env;
+console.log(VITE_BACKEND_SERVER);
+
 const Contact = () => {
   const [formDetails, setFormDetails] = useState<IFormDetails>(formInitialDetails);
   const [buttonText, setButtonText] = useState<string>('Enviar');
@@ -33,7 +36,7 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setButtonText('Enviando...');
-    let response = await fetch('http://localhost:5000/contact', {
+    let response = await fetch(`${VITE_BACKEND_SERVER}/contact`, {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/json;charset=utf-8',
@@ -101,15 +104,15 @@ const Contact = () => {
                     placeholder="Mensaje"
                     onChange={(e) => onFormUpdate('message', e.target.value)}
                   />
+                  {status.message && (
+                    <Col>
+                      <p className={status.success === false ? 'danger' : 'success'}>{status.message}</p>
+                    </Col>
+                  )}
                   <button type="submit">
                     <span>{buttonText}</span>
                   </button>
                 </Col>
-                {status.message && (
-                  <Col>
-                    <p className={status.success === false ? 'danger' : 'success'}>{status.message}</p>
-                  </Col>
-                )}
               </Row>
             </form>
           </Col>
